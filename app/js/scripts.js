@@ -202,11 +202,25 @@ $(document).ready(function () {
     return poll_session;
   }
 
-  var poll_session = getPollSession(headersArr).trim();
+  var poll_session = getPollSession(headersArr) !== undefined ? getPollSession(headersArr).trim() : false;
 
   // get timezone offset
-  var x = new Date();
-  var currentTimeZoneOffsetInHours = x.getTimezoneOffset() / 60;
+  var date = new Date();
+  const currentTimeZoneOffsetInHours_func = () => {
+    let offset = date.getTimezoneOffset() / 60;
+    if (Math.sign(offset) === -1) {
+      return Math.abs(offset);
+    }
+    if (Math.sign(offset) === 1) {
+      return -Math.abs(offset);
+    }
+    if (Math.sign(offset) === 0 && Math.sign(offset) === -0) {
+      return Math.abs(offset);
+    }
+  };
+
+  const currentTimeZoneOffsetInHours = currentTimeZoneOffsetInHours_func();
+  console.log(currentTimeZoneOffsetInHours)
 
   // send timezone offset to server
   var setTimezoneReques_sent = sessionStorage.getItem('setTimezoneReques_sent');
@@ -216,10 +230,6 @@ $(document).ready(function () {
     $.ajax({
       url: setTimezoneRequest_Url,
       type: "GET",
-      // data: {
-      //     csrfmiddlewaretoken: token,
-      //     data: data
-      // },
       success: function (data) {
         console.log(data);
         // set setTimezoneReques_sent to true
