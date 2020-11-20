@@ -27,12 +27,6 @@ $(document).ready(function () {
     return regex.test(email);
   };
 
-  // field doesn't consist of spaces
-  function ifNotSpace(field) {
-    var regex = /\S/;
-    return regex.test(field);
-  }
-
   // validate form
   var email = $('#email');
   var customerSubmitLabel = $('#customer_form_label');
@@ -50,7 +44,7 @@ $(document).ready(function () {
 
     // text inputs require validation
     text_inputs.each(function () {
-      if ($(this).val() === '' || !ifNotSpace($(this).val())) {
+      if ($(this).val() === '') {
         text_inputs_filled_arr.push(false)
         $(this).closest('.form-group').addClass('required');
       } else {
